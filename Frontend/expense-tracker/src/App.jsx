@@ -1,48 +1,35 @@
-import React from 'react'
-
-import{
+import React from 'react';
+import {
   BrowserRouter as Router,
-  Routes, 
+  Routes,
   Route,
   Navigate,
-}
-from"react-router-dom";
+} from "react-router-dom";
 
-import Login from ",/pages/Auth/Login";
-import Signup from ",/pages/Auth/Signup";
-import Home from ",/pages/Dashboard/Home";
-import Income from ",/pages/Dashboard/Income";
-import Expense from ",/pages/Dashboard/Expense";
-import { GrDashboard } from 'react-icons/gr';
+import Login from "./pages/Auth/Login";  // Capital 'A' in 'Auth'
+import Signup from "./pages/Auth/Signup";
+import Home from "./pages/Dashboard/Home";
+import Income from "./pages/Dashboard/Income";
+import Expense from "./pages/Dashboard/Expense";
+
 const App = () => {
-  return(
-    <div>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Root />}/>
-          <Route path='/login' exact element={<Login />}/>
-          <Route path='/signup' exact element={<Signup />}/>
-          <Route path='/dashboard' exact element={<Dashboard />}/>
-          <Route path='/income' exact element={<Income />}/>
-          <Route path='/expense ' exact element={<Expense />}/>
-        </Routes>
-      </Router>
-    </div>
-  
-
-  )
-}
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Root />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/dashboard" element={<Home />} />
+        <Route path="/income" element={<Income />} />
+        <Route path="/expense" element={<Expense />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;
 
 const Root = () => {
-    // Check if token exists in localStorage
-    const isAuthenticated = !!localStorage.getItem("token");
-
-    // Redirect to dashboard if authenticated, otherwise to login
-    return isAuthenticated ? (
-        <Navigate to="/dashboard" />
-    ) : (
-        <Navigate to="/login" />
-    );
+  const isAuthenticated = !!localStorage.getItem("token");
+  return isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />;
 };
