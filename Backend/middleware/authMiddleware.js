@@ -1,15 +1,15 @@
-const express =require("express");
+const jwt = require('jsonwebtoken'); //
+const User = require('../models/Users'); //
 
-const {
-    registerUser,
-    loginUser,
-    gerUserInfo,
-} = require("../controllers/authController");
-const router = express.Router();
-router.post("/register", registerUser);
+exports.protect = async (req, res, next) => { //
+    let token = req.headers.authorization?.split(" ")[1]; //
+    if (!token) return res.status(401).json({ message: "Not authorized, no token" }); //
 
-router.post("/login", loginUser);
-
-router.get("/getUser", protect, getUserInfo);
-
-module.exports =  router;
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET); //
+        req.user = await User.findById(decoded.id).select('-password'); //
+        next(); //
+    } catch (err) {
+        res.status(401).json({ message: "Not authorized, token failed" }); //
+    }
+};
