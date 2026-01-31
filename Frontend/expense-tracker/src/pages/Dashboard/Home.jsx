@@ -8,7 +8,11 @@ import { LuHandCoins, LuWalletMinimal } from "react-icons/lu";
 import { IoMdCard } from "react-icons/io";
 import InfoCard from "../../components/Cards/InfoCard";
 import { useNavigate } from 'react-router-dom';
+
+// Fixed Imports
 import RecentTransactions from "../../components/Dashboard/RecentTransactions";
+import FinanceOverview from "../../components/Dashboard/FinanceOverview";
+import Last30DaysExpenses from "../../components/Dashboard/last30DaysExpenses"; // Capitalized L
 
 const Home = () => {
     useUserAuth();
@@ -33,7 +37,6 @@ const Home = () => {
         }
     };
 
-    // Fetch dashboard data when component mounts
     useEffect(() => {
         fetchDashboardData();
     }, []);
@@ -41,6 +44,7 @@ const Home = () => {
     return (
         <DashboardLayout activeMenu="Dashboard">
             <div className="my-5 mx-auto">
+                {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <InfoCard
                         icon={<IoMdCard />}
@@ -48,14 +52,12 @@ const Home = () => {
                         value={addThousandsSeparator(dashboardData?.totalBalance || 0)}
                         color="bg-primary"
                     />
-
                     <InfoCard
                         icon={<LuWalletMinimal />}
                         label="Total Income"
                         value={addThousandsSeparator(dashboardData?.totalIncome || 0)}
                         color="bg-orange-500"
                     />
-
                     <InfoCard
                         icon={<LuHandCoins />}
                         label="Total Expense"
@@ -63,14 +65,24 @@ const Home = () => {
                         color="bg-red-500"
                     />
                 </div>
-                <div className="grid grid-clos-1 md:grid-cols-2 gap-6 mt-6">
+
+                {/* Charts & Transactions Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <RecentTransactions 
-                        transactions= {dashboardData?. recentTransactions}
-                        onSeeMore={()=> navigate("/expense")}/>
+                        transactions={dashboardData?.recentTransactions || []}
+                        onSeeMore={() => navigate("/expense")}
+                    />
                         
+                    <FinanceOverview
+                        totalBalance={dashboardData?.totalBalance || 0}
+                        totalIncome={dashboardData?.totalIncome || 0}
+                        totalExpense={dashboardData?.totalExpense || 0}
+                    />
 
+                    <Last30DaysExpenses 
+                        data={dashboardData?.last30DaysExpenses?.transactions || []}
+                    />
                 </div>
-
             </div>
         </DashboardLayout>
     );
