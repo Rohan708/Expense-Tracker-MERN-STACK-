@@ -22,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+# Ignore sensitive environment variables
+Backend/.env
+
+# Ignore uploaded profile images
+Backend/uploads/*.jpeg
+Backend/uploads/*.jpg
+Backend/uploads/*.png
+
+# Ignore dependencies
+node_modules/
