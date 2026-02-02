@@ -1,5 +1,4 @@
-import React from 'react'
-
+import React from 'react';
 import {
     BarChart,
     Bar,
@@ -7,61 +6,71 @@ import {
     YAxis,
     CartesianGrid,
     Tooltip,
-    Legend,
     ResponsiveContainer,
     Cell,
 } from "recharts";
-import CustomTooltip from './CustomTooltip';
 
-const CustomBarChart = ({data}) => {
+const CustomBarChart = ({ data }) => {
 
-    // function to alternate colors
+    const getBarColor = (index) => {
+        return index % 2 === 0 ? "#875cf5" : "#cfbefb";
+    };
 
-    const getBarColor=(index)=> {
-        return index % 2 === 0? "#875cf5": "#cfbefb";
-
-    }
-
-    const CustomTooltip=({ active,payload}) => {
-        if(active && payload && payload.length){
+    const CustomTooltip = ({ active, payload }) => {
+        if (active && payload && payload.length) {
             return (
-                <div className='bg-white shadow-md rounded-lg p-2 border border-gray-300 '>
-                    <p className='text-xs font-semibold text-purple-800 mb-1'>{payload[0].payload.cateogory}</p>
+                <div className='bg-white shadow-md rounded-lg p-2 border border-gray-300'>
+                    {/* Accessing the day from the payload */}
+                    <p className='text-xs font-semibold text-purple-800 mb-1'>
+                        {payload[0].payload.day}
+                    </p>
                     <p className='text-sm text-gray-600'>
-                        Amount:<span className='text-sm font-medium text-gray-900'>${payload[0].payload.amount}</span>
+                        Amount: <span className='text-sm font-medium text-gray-900'>
+                            ${payload[0].value}
+                        </span>
                     </p>
                 </div>
-
             );
         }
         return null;
     };
-  return (
-    <div className='bg-white mt-6'>
-        <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data}>
-                <CartesianGrid stroke='none'/>
 
-                <XAxis datakey="month" tick={{ fontSize:12, fill: "#555"}} stroke="none"/>
-                <YAxis tick={{ fontSize:12, fill:"#555"}} stroke='none'/>
+    return (
+        <div className='bg-white mt-6 w-full'>
+            <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={data}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
 
-                <Tooltip content={CustomTooltip}/>
-                <Bar    
-                    datakey="amount"
-                    fill="#ff8042"
-                    radius={[10,10,0,0]}
-                    activeDot={{r:8, fill:"yellow"}}
-                    activeStyle={{fill :"green"}}
+                    {/* FIXED: dataKey with capital 'K' */}
+                    <XAxis 
+                        dataKey="day" 
+                        tick={{ fontSize: 10, fill: "#666" }} 
+                        axisLine={false}
+                        tickLine={false}
+                        interval={2} 
+                    />
+                    
+                    <YAxis 
+                        tick={{ fontSize: 10, fill: "#666" }} 
+                        axisLine={false}
+                        tickLine={false}
+                    />
+
+                    <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
+                    
+                    {/* FIXED: dataKey with capital 'K' and mapped to 'amount' */}
+                    <Bar 
+                        dataKey="amount" 
+                        radius={[4, 4, 0, 0]}
                     >
-                        {data.map((entry, index)=>(
-                            <Cell key={index} fill={getBarColor(index)}/> 
+                        {data.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={getBarColor(index)} />
                         ))}
                     </Bar>
-            </BarChart>
-        </ResponsiveContainer>
-    </div>
-    
-  )
-} 
+                </BarChart>
+            </ResponsiveContainer>
+        </div>
+    );
+}
 
-export default CustomBarChart
+export default CustomBarChart;

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'; // Added useState import
-import { prepareExpenseBarChartData } from "../../utils/helper"; // Ensure this path is correct for your project
+import React, { useEffect, useState } from 'react';
+import { prepareExpenseBarChartData } from "../../utils/helper";
 import CustomBarChart from "../Charts/CustomBarChart";
-const Last30DaysExpenses = ({ data }) => { // Capitalized the component name
-  const [chartData, setChartData] = useState([]); // Fixed typo: setCharData -> setChartData
+
+const Last30DaysExpenses = ({ data }) => {
+  const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
     if (data) {
@@ -17,12 +18,17 @@ const Last30DaysExpenses = ({ data }) => { // Capitalized the component name
         <h5 className='text-lg font-semibold'>Last 30 Days Expenses</h5>
       </div>
       
-      {/* This is where your BarChart component will go next */}
-      <div className="h-[300px] flex items-center justify-center text-gray-400">
-        {chartData.length > 0 ? "Chart Ready to Render" : "No data available for the last 30 days"}
+      <div className="h-[300px] w-full">
+        {chartData.length > 0 ? (
+          // If we have data, show the actual chart
+          <CustomBarChart data={chartData} />
+        ) : (
+          // If no data, show the empty state message
+          <div className="h-full flex items-center justify-center text-gray-400">
+            No data available for the last 30 days
+          </div>
+        )}
       </div>
-      <CustomBarChart data={chartData} 
-      />
     </div>
   );
 };
